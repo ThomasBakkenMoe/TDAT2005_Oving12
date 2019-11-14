@@ -1,3 +1,8 @@
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class HuffmanCompressor {
 
 
@@ -36,12 +41,25 @@ public class HuffmanCompressor {
 
     }
 
-    public void compress(String file){
+    public void compress(String file) throws Exception{
+
+        try{
+
+            DataInputStream fileInput = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+
+        }catch (FileNotFoundException e){
+            throw new Exception("File not found!\nError message:\n" + e);
+        }
+
+
+
+
 
     }
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws Exception{
+        HuffmanCompressor huffmanCompressor = new HuffmanCompressor();
+        huffmanCompressor.compress("");
     }
 }
 
