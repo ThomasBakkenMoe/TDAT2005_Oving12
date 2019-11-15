@@ -1,7 +1,6 @@
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.io.*;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collections;
 
 public class HuffmanDecompressor {
@@ -68,7 +67,7 @@ public class HuffmanDecompressor {
 
         @Override
         public String toString() {
-            return data + ": " + frequency;
+            return (char)data + ": " + frequency;
         }
     }
 
@@ -104,11 +103,15 @@ public class HuffmanDecompressor {
         byte[] byteData = new byte[dataInput.available()];
         dataInput.readFully(byteData);
 
-        dataInput.close();
 
-        for (int i = 0; i < leafNodeList.size(); i++) {
-            System.out.println(leafNodeList.get(i));
-        }
+
+        dataInput.close();
+        BitSet bitSet = BitSet.valueOf(byteData);
+
+        System.out.println(bitSet.toString());
+
+        String compressedString = bitSet.toString();
+        String uncompressedString = "";
 
         Node[] leafNodeArray = leafNodeList.toArray(new Node[leafNodeList.size()]);
 
@@ -134,49 +137,21 @@ public class HuffmanDecompressor {
 
         Node root = leafNodeList.get(0);
 
-        byte foundData = (byte) 0;
-        boolean hasFoundData = false;
-        int index = 0;
-        int bitindex = 0;
-        Node currentNode = null;
+        Node currentNode = root;
 
-        while (true){
-            if (index > byteData.length){
-                break;
+        for (int i = 0; i < bitSet.length(); i++) {
+
+            if (currentNode.left == null && currentNode.right == null){
+                System.out.println("Found Leaf!" + currentNode.data);
+                dataOutput.writeByte(currentNode.data);
+
+                currentNode = root;
             }
 
-            currentNode = root;
-
-            while (true){
-
-                if (currentNode.left == null && currentNode.right == null){
-                    foundData = currentNode.data;
-                    hasFoundData = true;
-                    bitindex++;
-                    break;
-                }
-
-                if (isBitSet(byteData[index], bitindex)){
-                    currentNode = currentNode.right;
-                }else {
-                    currentNode = currentNode.left;
-                }
-                bitindex++;
-                if (bitindex > 7){
-                    break;
-                }
-            }
-
-            index++;
-
-            if (hasFoundData){
-                for (Node node: leafNodeArray) {
-                    if (node.data == foundData){
-                        dataOutput.writeByte(node.data);
-                        break;
-                    }
-                }
-                hasFoundData = false;
+            if (!bitSet.get(i)){
+                currentNode = currentNode.left;
+            }else {
+                currentNode = currentNode.right;
             }
         }
 

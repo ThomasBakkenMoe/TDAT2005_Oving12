@@ -80,7 +80,7 @@ public class HuffmanCompressor {
             foundInReturn = false;
 
             for (Node aReturnList : returnList) {
-                if (aReturnList.data == (char) byteData[i]) {
+                if (aReturnList.data == byteData[i]) {
                     aReturnList.frequency++;
                     foundInReturn = true;
                     break;
@@ -211,6 +211,8 @@ public class HuffmanCompressor {
             }
         }
 
+        System.out.println(bitSet.toString());
+
         // Export
 
         // Writes headerint to file
@@ -230,9 +232,6 @@ public class HuffmanCompressor {
         dataOutput.close();
 
         System.out.println("Done!");
-
-
-
     }
 
     public static void main(String[] args) throws Exception{
