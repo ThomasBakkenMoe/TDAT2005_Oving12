@@ -214,7 +214,6 @@ public class HuffmanCompressor {
 
         // Export
         byte[] exportByteArray = bitSet.toByteArray();
-        bitSet.
         for (byte b: exportByteArray) {
             dataOutput.writeByte(b);
             System.out.println("Byte written: " + b);
