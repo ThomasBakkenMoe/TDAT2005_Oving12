@@ -101,7 +101,6 @@ public class HuffmanCompressor {
         FileInputStream fileInput;
         DataInputStream dataInput;
         byte[] byteData;
-        ArrayList<Character> charList= new ArrayList<>();
         try{
             fileInput = new FileInputStream(inputFile);
             dataInput = new DataInputStream(new BufferedInputStream(fileInput));
@@ -213,20 +212,31 @@ public class HuffmanCompressor {
         }
 
         // Export
+
+        // Writes headerint to file
+        dataOutput.writeInt(leafNodeArray.length);
+
+        // Writes the frequency table to file
+        for (Node node: leafNodeArray) {
+            dataOutput.writeByte(node.data);
+            dataOutput.writeInt(node.frequency);
+        }
+
         byte[] exportByteArray = bitSet.toByteArray();
         for (byte b: exportByteArray) {
             dataOutput.writeByte(b);
             System.out.println("Byte written: " + b);
         }
-
         dataOutput.close();
 
         System.out.println("Done!");
+
+
 
     }
 
     public static void main(String[] args) throws Exception{
         HuffmanCompressor huffmanCompressor = new HuffmanCompressor();
-        huffmanCompressor.compress("src/opg12.txt", "src/output.txt");
+        huffmanCompressor.compress("src/opg12.txt", "src/compressed.txt");
     }
 }
